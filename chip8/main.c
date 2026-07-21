@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdint.h>
 #include <string.h>
+#include "font.h"
 
 #define MEMORY_SIZE 4096
 #define PROGRAM_START 0X200
@@ -21,6 +22,7 @@ uint8_t sound_timer;
 
 void init_chip8(void){
  memset(memory,0,MEMORY_SIZE);
+ memcpy(memory,fontset,sizeof(fontset));
  memset(display,0,sizeof(display));
  memset(V,0,sizeof(V));
  PC=PROGRAM_START;
