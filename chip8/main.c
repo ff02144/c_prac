@@ -2,6 +2,7 @@
 #include <stdint.h>
 #include <string.h>
 #include "font.h"
+#include "rom.h"
 
 #define MEMORY_SIZE 4096
 #define PROGRAM_START 0X200
@@ -35,9 +36,43 @@ void init_chip8(void){
 
 }
 
-int main(void){
+int main(int argc, char *argv[]){
 init_chip8();
 printf("HELLO! CHIP-8\n");
+	
+if(argc<2){
+printf("用法:%s<rom_file.ch8>\n",argv[0]);
+return 1;
+}
+int result=load_rom(argv[1],memory,PROGRAM_START);
+if(result!=0){
+printf(" ROM讀取失敗\n");
+return 1;
+}
+printf("ROM讀取成功\n");
+
+
+
+while(1){
+
+uint16_t opcode=(memory[PC]<<8)|memory[PC+1];
+
+printf("PC:0x%03X, opcode:0x%03X\n",PC,opcode);
+
+switch(opcode&0xF000){
+
+case 0x1000:
+	PC=opcode&0x0FFF;
+	break;
+default:
+	PC+=2;
+	break;
+
+}
+}
+
+
+
 return 0;
 
 }
