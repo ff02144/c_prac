@@ -64,6 +64,17 @@ switch(opcode&0xF000){
 case 0x1000:
 	PC=opcode&0x0FFF;
 	break;
+
+case 0x6000:
+	V[(opcode&0xF00)>>8]=opcode&0xFF;
+	PC+=2;
+	break;
+
+case 0x7000:
+	V[(opcode&0xF00)>>8]+=opcode&0xFF;
+	PC+=2;
+	break;
+
 default:
 	PC+=2;
 	break;
