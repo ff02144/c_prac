@@ -60,10 +60,25 @@ uint16_t opcode=(memory[PC]<<8)|memory[PC+1];
 printf("PC:0x%03X, opcode:0x%03X\n",PC,opcode);
 
 switch(opcode&0xF000){
-
-case 0x1000:
-	PC=opcode&0x0FFF;
+case 0x0000:
+	if(opcode==0x00E0){PC+=2; break;}
+	else if((opcode&0xF00)==0){
+	PC=stack[SP-1];
+	SP--;
 	break;
+	}
+	PC+=2;
+	break;
+case 0x1000:
+	PC=opcode&0xFFF;
+	break;
+
+case 0x2000:
+	stack[SP]=PC+2;
+	PC=opcode&0xFFF;
+	SP+=1;
+	break;
+	
 
 case 0x6000:
 	V[(opcode&0xF00)>>8]=opcode&0xFF;
@@ -74,6 +89,11 @@ case 0x7000:
 	V[(opcode&0xF00)>>8]+=opcode&0xFF;
 	PC+=2;
 	break;
+
+case 0x8000:
+	if((opcode&0x1)==0x0){
+		V[(opcode&0xF00)>>8]=V[(opcode&0xF0)>>4];}
+	PC+=2;
 
 default:
 	PC+=2;
