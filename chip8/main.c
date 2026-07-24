@@ -104,6 +104,11 @@ case 0x8000:
 		V[(opcode&0xF00)>>8]=V[(opcode&0xF0)>>4];}
 	PC+=2;
 	break;
+
+case 0xF000:
+	if((opcode&0xFF)==0x7){V[(opcode&0xF00)>>8]=delay_timer;}
+	PC+=2;
+	break;
 default:
 	PC+=2;
 	break;
