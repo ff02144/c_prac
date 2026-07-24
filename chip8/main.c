@@ -79,6 +79,15 @@ case 0x2000:
 	SP+=1;
 	break;
 	
+case 0x3000:
+	if(V[(opcode&0xF00)>>8]==(opcode&0xFF)){PC+=4;}
+	else{PC+=2;}
+	break;
+
+case 0x4000:
+        if(V[(opcode&0xF00)>>8]!=(opcode&0xFF)){PC+=4;}
+        else{PC+=2;}
+        break;
 
 case 0x6000:
 	V[(opcode&0xF00)>>8]=opcode&0xFF;
@@ -91,10 +100,10 @@ case 0x7000:
 	break;
 
 case 0x8000:
-	if((opcode&0x1)==0x0){
+	if((opcode&0x000F)==0x0000){
 		V[(opcode&0xF00)>>8]=V[(opcode&0xF0)>>4];}
 	PC+=2;
-
+	break;
 default:
 	PC+=2;
 	break;
