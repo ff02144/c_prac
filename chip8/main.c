@@ -100,11 +100,40 @@ case 0x7000:
 	break;
 
 case 0x8000:
-	if((opcode&0x000F)==0x0000){
-		V[(opcode&0xF00)>>8]=V[(opcode&0xF0)>>4];}
+	
+	switch(opcode&0x000F){
+		case 0x0:
+		V[(opcode&0xF00)>>8]=V[(opcode&0xF0)>>4];
+	  	break;
+		case 0x1:
+		V[(opcode&0xF00)>>8]|=V[(opcode&0xF0)>>4];
+		case 0x2:
+		V[(opcode&0xF00)>>8]&=V[(opcode&0xF0)>>4];
+	}
+
 	PC+=2;
 	break;
 
+case 0xD000:
+	{	V[15]=0;
+	uint8_t Vx=V[(opcode&0xF00)>>8];
+	uint8_t Vy=V[(opcode&0x0F0)>>4];
+	uint8_t N=(opcode&0xF);
+	for(int row=0;row<N;row++){
+	uint8_t byte=memory[I+row];
+		for(int col=0;col<8;col++){
+			if (byte & (1 << (7 - col))) {
+				int x=(Vx+col)&63;
+				int y=(Vy+row)&31;
+ 				if (display[y][x]==1){
+                    			V[15]=1;}
+     					display[y][x]^=1;
+     						}
+     					}
+				}
+	PC+=2;
+	break;
+	}
 case 0xF000:
 	if((opcode&0xFF)==0x7){V[(opcode&0xF00)>>8]=delay_timer;}
 	PC+=2;
