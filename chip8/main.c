@@ -100,15 +100,51 @@ case 0x7000:
 	break;
 
 case 0x8000:
-	
-	switch(opcode&0x000F){
+		uint8_t x=(opcode&0x0F00)>>8;
+    		uint8_t y=(opcode&0x00F0)>>4;
+	 switch(opcode&0x000F){
 		case 0x0:
-		V[(opcode&0xF00)>>8]=V[(opcode&0xF0)>>4];
+		V[x]=V[y];
 	  	break;
+		
 		case 0x1:
-		V[(opcode&0xF00)>>8]|=V[(opcode&0xF0)>>4];
+		V[x]|=V[y];
+		break;
+		
 		case 0x2:
-		V[(opcode&0xF00)>>8]&=V[(opcode&0xF0)>>4];
+		V[x]&=V[y];
+		break;
+		
+		case 0x3:
+		V[x]^=V[y];
+		break;
+		
+		case 0x4:
+		{int num=V[x]+V[y];
+                 V[15]=num>255?1:0;
+		 V[x]=num&0xFF;
+		}
+		 break;
+		
+		case 0x5:
+                 V[15]=V[x]>=V[y]?1:0;
+			 V[x]-=V[y];
+                break;
+
+		case 0x6:
+		V[15]=V[x]&0x1;
+		V[x]>>=1;
+		break;
+		
+		case 0x7:
+                V[15]=V[y]>=V[x]?1:0;
+		V[x]=V[y]-V[x];
+                break;
+		
+		case 0xE:
+		V[15]=(V[x]&0x80)>>7; 
+		V[x]<<=1;
+    		break;
 	}
 
 	PC+=2;
