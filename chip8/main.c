@@ -199,15 +199,28 @@ case 0xE000:{
 	break;
 	}
 	break;}
-case 0xF000:
+case 0xF000:{
+uint8_t X=(opcode&0xF00)>>8;
 	switch(opcode&0xFF){
-		case 0x07:
-		V[(opcode&0xF00)>>8]=delay_timer;
-	break;
-		
+	case 0x07:
+		V[X]=delay_timer;
+		break;
+	case 0x33:
+		memory[I]=V[X]/100;
+		memory[I+1]=(V[X]/10)%10;
+		memory[I+2]=V[X]%10;
+		break;
+	case 0x55:
+		for(int i=0;i<=X;i++){memory[I+i]=V[i];}
+		break;
+	case 0x65:
+                for(int i=0;i<=X;i++){V[i]=memory[I+i];}
+                break;
+	default:
+		break;	
 	}
 		PC+=2;
-	break;
+	break;}
 default:
 	PC+=2;
 	break;
