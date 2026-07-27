@@ -205,6 +205,28 @@ uint8_t X=(opcode&0xF00)>>8;
 	case 0x07:
 		V[X]=delay_timer;
 		break;
+	case 0x0A:
+		{
+		int check=-1;
+		for(int i=0;i<16;i++){
+		if(keypad[i]==1){
+			check=i;
+			break;
+		}
+		}
+
+		if (check == -1) {
+		break;
+		}
+		PC+=2;
+		break;
+		}
+	case 0x15:
+		delay_timer=V[X];
+		break;
+	case 0x18:
+		sound_timer=V[X];
+		break;
 	case 0x33:
 		memory[I]=V[X]/100;
 		memory[I+1]=(V[X]/10)%10;
