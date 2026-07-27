@@ -150,6 +150,11 @@ case 0x8000:
 	PC+=2;
 	break;
 
+case 0xA000:
+	I=opcode&0xFFF;
+	PC+=2;
+	break;
+
 case 0xD000:
 	{	V[15]=0;
 	uint8_t Vx=V[(opcode&0xF00)>>8];
