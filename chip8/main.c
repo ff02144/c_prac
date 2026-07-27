@@ -89,6 +89,13 @@ case 0x4000:
         else{PC+=2;}
         break;
 
+case 0x5000:{
+	uint8_t x=(opcode&0x0F00)>>8;
+        uint8_t y=(opcode&0x00F0)>>4;
+	PC+=(V[x]==V[y])?4:2;
+	break;
+	    }
+
 case 0x6000:
 	V[(opcode&0xF00)>>8]=opcode&0xFF;
 	PC+=2;
@@ -149,7 +156,12 @@ case 0x8000:
 
 	PC+=2;
 	break;
-
+case 0x9000:{
+        uint8_t x=(opcode&0x0F00)>>8;
+        uint8_t y=(opcode&0x00F0)>>4;
+        PC+=(V[x]==V[y])?2:4;
+        break;
+            }
 case 0xA000:
 	I=opcode&0xFFF;
 	PC+=2;
@@ -188,8 +200,13 @@ case 0xE000:{
 	}
 	break;}
 case 0xF000:
-	if((opcode&0xFF)==0x7){V[(opcode&0xF00)>>8]=delay_timer;}
-	PC+=2;
+	switch(opcode&0xFF){
+		case 0x07:
+		V[(opcode&0xF00)>>8]=delay_timer;
+	break;
+		
+	}
+		PC+=2;
 	break;
 default:
 	PC+=2;
