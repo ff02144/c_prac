@@ -170,6 +170,18 @@ case 0xD000:
 	PC+=2;
 	break;
 	}
+
+case 0xE000:{
+	uint8_t key=V[(opcode&0xF00)>>8]; 
+	switch(opcode&0xFF){
+	case 0xA1:
+		PC+=(!keypad[key])?4:2; 
+	break;
+	case 0x9E:
+            	PC+=(keypad[key])?4:2;
+	break;
+	}
+	break;}
 case 0xF000:
 	if((opcode&0xFF)==0x7){V[(opcode&0xF00)>>8]=delay_timer;}
 	PC+=2;
