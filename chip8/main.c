@@ -236,6 +236,20 @@ uint8_t X=(opcode&0xF00)>>8;
 	case 0x18:
 		sound_timer=V[X];
 		break;
+	case 0x1E:
+		{
+		  uint8_t X=(opcode&0x0F00)>>8;
+		V[15]=(V[X]+I)>0xFFF?1:0;
+		I=I+V[X];
+		break;
+		}
+	case 0x29:
+		{
+		uint8_t x=(opcode&0x0F00)>>8;
+		uint8_t character=V[x]&0x0F;
+		I=(character*5);
+		break;
+		}
 	case 0x33:
 		memory[I]=V[X]/100;
 		memory[I+1]=(V[X]/10)%10;
