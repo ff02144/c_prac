@@ -8,7 +8,7 @@
 
 #define MEMORY_SIZE 4096
 #define PROGRAM_START 0X200
-
+#define INSTRUCTIONS_PER_FRAME 10
 uint8_t memory[MEMORY_SIZE];
 
 uint8_t V[16];
@@ -57,6 +57,7 @@ printf("ROM讀取成功\n");
 
 while(1){
 
+for(int for_loop=0; for_loop<INSTRUCTIONS_PER_FRAME; for_loop++){
 uint16_t opcode=(memory[PC]<<8)|memory[PC+1];
 
 printf("PC:0x%03X, opcode:0x%03X\n",PC,opcode);
@@ -212,6 +213,7 @@ case 0xE000:{
             	PC+=(keypad[key])?4:2;
 	break;
 	default:
+	PC+=2;
 	break;
 	}
 	break;}
@@ -235,6 +237,7 @@ uint8_t X=(opcode&0xF00)>>8;
 		if (check == -1) {
 		break;
 		}
+		V[X]=(uint8_t)check;
 		PC+=2;
 		break;
 		}
@@ -285,9 +288,10 @@ default:
 
 
 }
+}//switch end
+if(delay_timer>0){delay_timer--;}
+if(sound_timer>0){sound_timer--;}
 }
-
-
 
 return 0;
 
