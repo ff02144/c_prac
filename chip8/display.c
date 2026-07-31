@@ -1,5 +1,6 @@
 #include "display.h"
-
+#include <stdio.h>
+#include <stdint.h>
 static SDL_Texture *texture = NULL;
 static SDL_Window *window = NULL;
 static SDL_Renderer *renderer = NULL;
@@ -52,7 +53,21 @@ return 1;
 
 
 
-void close_display(void){}
+void close_display(void){
+if(texture!=NULL){
+SDL_DestroyTexture(texture);
+texture=NULL;
+}
+if(renderer!=NULL){
+	SDL_DestroyRenderer(renderer);
+	renderer=NULL;
+}
+if (window!=NULL){
+       SDL_DestroyWindow(window);
+       window=NULL;
+}
+SDL_Quit();
+}
 
 
 void render_display(uint8_t display[32][64]){
