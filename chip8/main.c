@@ -1,6 +1,8 @@
 #include <stdio.h>
 #include <stdint.h>
 #include <string.h>
+#include <stdlib.h>
+#include <time.h>
 #include "font.h"
 #include "rom.h"
 
@@ -33,7 +35,7 @@ void init_chip8(void){
  memset(keypad,0,sizeof(keypad));
  delay_timer=0;
  sound_timer=0;
-
+srand((unsigned int)time(NULL));
 }
 
 int main(int argc, char *argv[]){
@@ -167,6 +169,13 @@ case 0xA000:
 	PC+=2;
 	break;
 
+case 0xC000:
+	{
+	uint8_t random_byte = rand()&(0xFF);
+	V[(opcode&0xF00)>>8]=random_byte&(opcode&0xFF);
+	PC+=2;
+	break;
+	}
 case 0xD000:
 	{	V[15]=0;
 	uint8_t Vx=V[(opcode&0xF00)>>8];
