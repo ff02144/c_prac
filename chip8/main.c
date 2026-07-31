@@ -3,12 +3,13 @@
 #include <string.h>
 #include <stdlib.h>
 #include <time.h>
+#include <unistd.h>
 #include "font.h"
 #include "rom.h"
 
 #define MEMORY_SIZE 4096
 #define PROGRAM_START 0X200
-#define INSTRUCTIONS_PER_FRAME 10
+#define INSTRUCTIONS_PER_FRAME 15
 uint8_t memory[MEMORY_SIZE];
 
 uint8_t V[16];
@@ -281,6 +282,7 @@ uint8_t X=(opcode&0xF00)>>8;
                  PC+=2;
 		break;
 	default:
+		PC+=2;
 		break;	
 	}
 	break;}
@@ -295,7 +297,11 @@ if(delay_timer>0){delay_timer--;}
 if(sound_timer>0){sound_timer--;}
 
 clock_t target=(CLOCKS_PER_SEC*16)/1000;
-while (clock()-start<target){
+clock_t elapsed=clock()-start;
+if(elapsed<target){
+useconds_t sleep_us=(useconds_t)((target-elapsed)*1000000/CLOCKS_PER_SEC);
+
+usleep(sleep_us);
 }
 }
 
