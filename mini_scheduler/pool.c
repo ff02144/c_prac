@@ -19,12 +19,12 @@ return &pool[block_size*i];
 return NULL;
 }
 
-/*
+
 void block_free(void* ptr){
 uint32_t index=(uint32_t)(((uint8_t*)ptr-&pool[0])/block_size);
 block_map&=~(1UL<<index);
 }
-
+/*
 int main(){
     void* p1=block_alloc();
     void* p2=block_alloc();
