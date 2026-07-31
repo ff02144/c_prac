@@ -64,9 +64,9 @@ printf("PC:0x%03X, opcode:0x%03X\n",PC,opcode);
 switch(opcode&0xF000){
 case 0x0000:
 	if(opcode==0x00E0){PC+=2; break;}
-	else if((opcode&0xF00)==0){
-	PC=stack[SP-1];
+	else if((opcode&0x00EE)==0){
 	SP--;
+	PC=stack[SP];
 	break;
 	}
 	PC+=2;
@@ -209,13 +209,17 @@ case 0xE000:{
 	case 0x9E:
             	PC+=(keypad[key])?4:2;
 	break;
+	default:
+	break;
 	}
+	 PC+=2;
 	break;}
 case 0xF000:{
 uint8_t X=(opcode&0xF00)>>8;
 	switch(opcode&0xFF){
 	case 0x07:
 		V[X]=delay_timer;
+		PC+=2
 		break;
 	case 0x0A:
 		{
@@ -235,15 +239,18 @@ uint8_t X=(opcode&0xF00)>>8;
 		}
 	case 0x15:
 		delay_timer=V[X];
+		 PC+=2;
 		break;
 	case 0x18:
 		sound_timer=V[X];
+		 PC+=2;
 		break;
 	case 0x1E:
 		{
 		  uint8_t X=(opcode&0x0F00)>>8;
 		V[15]=(V[X]+I)>0xFFF?1:0;
 		I=I+V[X];
+		 PC+=2;
 		break;
 		}
 	case 0x29:
@@ -251,23 +258,26 @@ uint8_t X=(opcode&0xF00)>>8;
 		uint8_t x=(opcode&0x0F00)>>8;
 		uint8_t character=V[x]&0x0F;
 		I=(character*5);
+		 PC+=2;
 		break;
 		}
 	case 0x33:
 		memory[I]=V[X]/100;
 		memory[I+1]=(V[X]/10)%10;
 		memory[I+2]=V[X]%10;
+		 PC+=2;
 		break;
 	case 0x55:
 		for(int i=0;i<=X;i++){memory[I+i]=V[i];}
+		 PC+=2;
 		break;
 	case 0x65:
                 for(int i=0;i<=X;i++){V[i]=memory[I+i];}
-                break;
+                 PC+=2;
+		break;
 	default:
 		break;	
 	}
-		PC+=2;
 	break;}
 default:
 	PC+=2;
