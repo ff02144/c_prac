@@ -68,6 +68,29 @@ while (SDL_PollEvent(&event)) {
   	    close_display();
 return 0;
     }
+if (event.type==SDL_KEYDOWN||event.type==SDL_KEYUP){
+int pressed=(event.type==SDL_KEYDOWN)?1:0;
+SDL_Scancode sc=event.key.keysym.scancode;
+switch (sc) {
+            case SDL_SCANCODE_1: keypad[0x1] = pressed; break;
+            case SDL_SCANCODE_2: keypad[0x2] = pressed; break;
+            case SDL_SCANCODE_3: keypad[0x3] = pressed; break;
+            case SDL_SCANCODE_4: keypad[0xC] = pressed; break;
+            case SDL_SCANCODE_Q: keypad[0x4] = pressed; break;
+            case SDL_SCANCODE_W: keypad[0x5] = pressed; break;
+            case SDL_SCANCODE_E: keypad[0x6] = pressed; break;
+            case SDL_SCANCODE_R: keypad[0xD] = pressed; break;
+            case SDL_SCANCODE_A: keypad[0x7] = pressed; break;
+            case SDL_SCANCODE_S: keypad[0x8] = pressed; break;
+            case SDL_SCANCODE_D: keypad[0x9] = pressed; break;
+            case SDL_SCANCODE_F: keypad[0xE] = pressed; break;
+            case SDL_SCANCODE_Z: keypad[0xA] = pressed; break;
+            case SDL_SCANCODE_X: keypad[0x0] = pressed; break;
+            case SDL_SCANCODE_C: keypad[0xB] = pressed; break;
+            case SDL_SCANCODE_V: keypad[0xF] = pressed; break;
+            default: break;
+        }
+}
 }
 
 clock_t start=clock();	
