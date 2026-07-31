@@ -169,6 +169,9 @@ case 0xA000:
 	PC+=2;
 	break;
 
+case 0xB000:
+	PC=V[0]+(opcode&0x0FFF);
+	break;
 case 0xC000:
 	{
 	uint8_t random_byte = rand()&(0xFF);
