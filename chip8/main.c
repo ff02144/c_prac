@@ -57,6 +57,8 @@ printf("ROM讀取成功\n");
 
 while(1){
 
+clock_t start=clock();	
+	
 for(int for_loop=0; for_loop<INSTRUCTIONS_PER_FRAME; for_loop++){
 uint16_t opcode=(memory[PC]<<8)|memory[PC+1];
 
@@ -291,6 +293,10 @@ default:
 }//switch end
 if(delay_timer>0){delay_timer--;}
 if(sound_timer>0){sound_timer--;}
+
+clock_t target=(CLOCKS_PER_SEC*16)/1000;
+while (clock()-start<target){
+}
 }
 
 return 0;
