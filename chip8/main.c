@@ -5,6 +5,8 @@
 #include <time.h>
 #include <SDL2/SDL.h>
 #include <unistd.h>
+
+#include "display.h"
 #include "font.h"
 #include "rom.h"
 
@@ -55,48 +57,18 @@ return 1;
 }
 printf("ROM讀取成功\n");
 
-    if (SDL_Init(SDL_INIT_VIDEO)!=0){
-        printf("SDL_Init Error:%s\n",SDL_GetError());
-        return 1;
-    }
 
-    SDL_Window *window=SDL_CreateWindow(
-        "CHIP-8 Emulator",
-        SDL_WINDOWPOS_CENTERED,
-        SDL_WINDOWPOS_CENTERED,
-        960,
-        480,
-        SDL_WINDOW_SHOWN
-    );
-    if (window==NULL){
-        printf("SDL_CreateWindow Error:%s\n",SDL_GetError());
-        SDL_Quit();
-        return 1;
-    }
+if(init_display()!=0) return 1;
 
-    SDL_Renderer *renderer=SDL_CreateRenderer(
-        window,
-        -1,
-        SDL_RENDERER_ACCELERATED
-    );
-    if (renderer==NULL){
-        printf("SDL_CreateRenderer Error:%s\n",SDL_GetError());
-        SDL_DestroyWindow(window);
-        SDL_Quit();
-        return 1;
-    }
 
 while(1){
-
-    SDL_Event event;
-    while (SDL_PollEvent(&event)){
-        if (event.type==SDL_QUIT){
-            SDL_DestroyRenderer(renderer);
-            SDL_DestroyWindow(window);
-            SDL_Quit();
-            return 0;
-        }
+SDL_Event event;
+while (SDL_PollEvent(&event)) {
+    if(event.type==SDL_QUIT) {
+  	    close_display();
+return 0;
     }
+}
 
 clock_t start=clock();	
 	
@@ -336,9 +308,7 @@ default:
 if(delay_timer>0){delay_timer--;}
 if(sound_timer>0){sound_timer--;}
 
-SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
-SDL_RenderClear(renderer);
-SDL_RenderPresent(renderer);
+render_display(display);
 
 clock_t target=(CLOCKS_PER_SEC*16)/1000;
 clock_t elapsed=clock()-start;
