@@ -23,13 +23,13 @@
 - gcc（編譯器）
 - SDL2 開發函式庫
 
-### 編譯
-```bash
--make
-
-###檔案結構
+### 檔案結構
 - `main.c` - 主迴圈、指令集、CPU 邏輯
 - `display.c` / `display.h` - SDL2 視窗、繪圖、鍵盤事件
 - `font.c` / `font.h` - CHIP-8 字型資料
 - `rom.c` / `rom.h` - ROM 檔案載入
 - `Makefile` - 編譯設定
+
+### 編譯
+```bash
+-make
