@@ -63,8 +63,10 @@ printf("PC:0x%03X, opcode:0x%03X\n",PC,opcode);
 
 switch(opcode&0xF000){
 case 0x0000:
-	if(opcode==0x00E0){PC+=2; break;}
-	else if((opcode&0x00EE)==0){
+	if(opcode==0x00E0){PC+=2;
+	memset(display,0,sizeof(display));       
+		break;}
+	else if(opcode==0x00EE){
 	SP--;
 	PC=stack[SP];
 	break;
@@ -212,14 +214,13 @@ case 0xE000:{
 	default:
 	break;
 	}
-	 PC+=2;
 	break;}
 case 0xF000:{
 uint8_t X=(opcode&0xF00)>>8;
 	switch(opcode&0xFF){
 	case 0x07:
 		V[X]=delay_timer;
-		PC+=2
+		PC+=2;
 		break;
 	case 0x0A:
 		{
@@ -247,7 +248,6 @@ uint8_t X=(opcode&0xF00)>>8;
 		break;
 	case 0x1E:
 		{
-		  uint8_t X=(opcode&0x0F00)>>8;
 		V[15]=(V[X]+I)>0xFFF?1:0;
 		I=I+V[X];
 		 PC+=2;
