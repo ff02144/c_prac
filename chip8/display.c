@@ -4,6 +4,25 @@
 static SDL_Texture *texture = NULL;
 static SDL_Window *window = NULL;
 static SDL_Renderer *renderer = NULL;
+extern uint8_t sound_timer;
+
+static void audio_callback(void *userdata, Uint8 *stream ,int len){
+int16_t *buffer=(int16_t*)stream;
+int samples=len/2;
+
+if(sound_timer>0){
+static int phase=0;
+for(int i=0; i<samples;i++){
+buffer[i]=(phase<22050)?30000:-30000;
+phase++;
+if(phase>=44100)phase=0;
+}
+}
+else{
+memset(buffer,0,len);
+}
+}
+
 
 int init_display(void){
 if(SDL_Init(SDL_INIT_VIDEO)!=0){
@@ -47,7 +66,20 @@ SDL_DestroyWindow(window);
 SDL_Quit();
 return 1;
 }
- return 0;
+
+SDL_AudioSpec want;
+SDL_zero(want);
+want.freq=44100;
+want.format=AUDIO_S16SYS;
+want.channels=1;
+want.samples=2048;
+want.callback=audio_callback;
+
+if(SDL_OpenAudio(&want, NULL)!=0){
+printf("SDL_OpenAudio錯誤:%s\n",SDL_GetError());
+}
+SDL_PauseAudio(0);
+return 0;
 }
 
 
@@ -66,6 +98,7 @@ if (window!=NULL){
        SDL_DestroyWindow(window);
        window=NULL;
 }
+SDL_CloseAudio();
 SDL_Quit();
 }
 
